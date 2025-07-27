@@ -1,0 +1,33 @@
+services:
+  web01:
+    build: .
+    container_name: web01
+    expose:
+      - "80"
+    networks:
+      - webnet
+
+  web02:
+    build: .
+    container_name: web02
+    expose:
+      - "80"
+    networks:
+      - webnet
+
+  lb01:
+    image: haproxy:alpine
+    container_name: lb01
+    ports:
+      - "80:80"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - web01
+      - web02
+    networks:
+      - webnet
+
+networks:
+  webnet:
+  
